@@ -3,13 +3,13 @@ package test;
 import java.io.IOException;
 import java.util.*;
 
+import analysis.MapHelper;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.list.TIntList;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import publisher.Graph;
 import publisher.GraphNoRemap;
-import utils.MapHelper;
 
 public class testMap {
 	// This proves that Java won't allow you to put more entries while you are iterating through the map.

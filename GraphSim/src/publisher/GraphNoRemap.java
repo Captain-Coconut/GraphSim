@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import analysis.MapHelper;
 import file.GetFileOperator;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.iterator.TIntObjectIterator;
@@ -17,7 +19,6 @@ import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
-import utils.MapHelper;
 
 // This is a revised version of class::GraphNoRemap.
 // The major change is right now we don't set remap/mapback as seperate functions and create new graphs

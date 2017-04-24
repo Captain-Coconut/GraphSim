@@ -1,11 +1,11 @@
-package utils;
+package analysis;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 import file.GetFileOperator;
 
-public class analyzeComponent {
+public class analyzeComponentSVMUF {
 	public static void main(String []args) throws IOException{
 		GetFileOperator gfo = new GetFileOperator();
 		BufferedReader br = gfo.getBR(args[0]);
@@ -15,7 +15,9 @@ public class analyzeComponent {
 		int count100_500 = 0, count500_1000 = 0, countlarger1000 = 0;
 		int max = Integer.MIN_VALUE;
 		while((line = br.readLine()) != null){
-			int size = line.split(",").length;
+			String clusters = line.split(":")[1];
+			clusters = clusters.substring(1, clusters.length() - 1);
+			int size = clusters.split(",").length;
 			max = size > max ? size : max;
 			if(size == 1) count1++;
 			else if(size == 2) count2++;
