@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/Jama-1.0.3.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/javaml-0.1.7/javaml-0.1.7.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/javaml-0.1.7/lib/ajt-2.9.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/javaml-0.1.7/lib/commons-math-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/javaml-0.1.7/lib/libsvm.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/javaml-0.1.7/lib/weka.jar"/>
+	<classpathentry kind="lib" path="/Users/baichuanzhou/Downloads/trove-3.1a1/3.1a1/lib/trove-3.1a1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
