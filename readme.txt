@@ -1,4 +1,1 @@
-Welcome to GIT.
-version2
-version3
-version4
+Welcome to GrahSim: a Java library for graph-related algorithms.
