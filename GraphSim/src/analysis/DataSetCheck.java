@@ -6,23 +6,23 @@ import gnu.trove.iterator.TIntIterator;
 import gnu.trove.list.TIntList;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 // Validate DataSet largestComponent_ConsecutiveID
 public class DataSetCheck {	
 	
 	public static void main(String [] args) throws IOException{
-		WeightedGraphTroveZorder wg = new WeightedGraphTroveZorder("largestComponent_ConsecutiveID",  "ReadTrack", 1);
-		System.out.println("node size:" + wg.numsofnodes);
-		System.out.println("edge size:" + wg.numsofedges);
-		System.out.println("minID:" + wg.MIN_ID);
-		System.out.println("maxID:" + wg.MAX_ID);
+		WeightedUndirectedGraph wg = new WeightedUndirectedGraph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
+		System.out.println("node size:" + wg.getNumOfNodes());
+		System.out.println("edge size:" + wg.getNumOfEdges());
+		System.out.println("minID:" + wg.getMinID());
+		System.out.println("maxID:" + wg.getMaxID());
 		
 		int i = 1;
 		
 		TIntObjectMap <TIntList> map = wg.map;
 
-		while(i <= wg.MAX_ID){
+		while(i <= wg.getMaxID()){
 			if(!map.containsKey(i)) {
 				System.out.println("ID not Consecutive at:" + i);
 			} else{

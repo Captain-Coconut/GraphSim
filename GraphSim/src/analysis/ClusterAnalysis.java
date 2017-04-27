@@ -16,7 +16,7 @@ import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 public class ClusterAnalysis {
 	
@@ -66,7 +66,7 @@ public class ClusterAnalysis {
 	}
 	
 	// limit the times of experiments by ite
-	public static void compareMetisBFSRandomWalk(WeightedGraphTroveZorder wg, String MetisOutput, String Results, String OverallResults, int iterations, double sampleRate, int ite) throws IOException{
+	public static void compareMetisBFSRandomWalk(WeightedUndirectedGraph wg, String MetisOutput, String Results, String OverallResults, int iterations, double sampleRate, int ite) throws IOException{
 		List <TIntList> clusters = ClusterAnalysis.getClusters(MetisOutput);
 		GetFileOperator gfo = new GetFileOperator();
 		Writer w = gfo.getWriter(Results);
@@ -197,8 +197,8 @@ public class ClusterAnalysis {
 	
 	public static void compare(String graphPath, String MetisOutput, String Results, int amplifier, int ite) throws IOException{
 		Random r = new Random();
-		WeightedGraphTroveZorder wg = new WeightedGraphTroveZorder(graphPath, graphPath + MetisOutput + "_ReadTrack" + r.nextFloat(), amplifier);
-		ClusterAnalysis.compareMetisBFSRandomWalk(wg, MetisOutput, Results, Results+"_Overview", 10, 1, ite);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(graphPath, 1,  ",",  4.58, 1000, 1, 2, 6);
+		ClusterAnalysis.compareMetisBFSRandomWalk(g, MetisOutput, Results, Results+"_Overview", 10, 1, ite);
 		//ClusterAnalysis.compareRandomWalk(wg, MetisOutput, Results+"_RW", Results+"_RW_Overall", 5);
 	}
 	

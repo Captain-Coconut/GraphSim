@@ -1,11 +1,8 @@
 package analysis;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,7 +13,7 @@ import file.GetFileOperator;
 import gnu.trove.list.TIntList;
 import gnu.trove.map.TIntObjectMap;
 import graph.UnweightedGraph;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 /**
  * Tally measurements in a graph
@@ -227,11 +224,11 @@ public class tallier {
 	}
 		
 	public static void tallyDegree(String input, String output) throws IOException{
-		WeightedGraphTroveZorder g = new WeightedGraphTroveZorder(input, input+"_ReadProgress", 1000);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(input, 1,  ",",  4.58, 1000, 1, 2, 6);
 		TIntObjectMap <TIntList> graph = g.map;
 		GetFileOperator gfo = new GetFileOperator();
 		Writer w = gfo.getWriter(output);
-		int MAX_ID = g.MAX_ID;
+		int MAX_ID = g.getMaxID();
 		int i = 1;
 		int degree;
 		while(i <= MAX_ID){

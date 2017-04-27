@@ -3,16 +3,7 @@ package test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
-
-import analysis.ClusterAnalysis;
 import file.GetFileOperator;
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class testWeight {
 	public static void main(String [] args) throws IOException{

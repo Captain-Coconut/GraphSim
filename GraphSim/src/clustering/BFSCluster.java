@@ -9,7 +9,7 @@ import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import graph.UnweightedGraphTrove;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 public class BFSCluster {
 
@@ -63,7 +63,7 @@ public class BFSCluster {
 		 * @param MAX: the maximum size of the cluster
 		 * @return
 		 */	
-		 public static TIntList BFS(WeightedGraphTroveZorder g, int s, int MAX)
+		 public static TIntList BFS(WeightedUndirectedGraph g, int s, int MAX)
 		    {
 				TIntObjectMap<TIntList> map = g.map;
 
@@ -110,11 +110,11 @@ public class BFSCluster {
 //		System.out.println(ug.map.toString());
 //		System.out.println(BFSCluster.BFS(ug, 1, 5));
 		System.out.println("Testing BFS...");
-		WeightedGraphTroveZorder wgtz = new WeightedGraphTroveZorder("largestComponent_ConsecutiveID", "TestBFS_Track", 1000);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
 		int i = 0;
 		while(i++ < 10){
 			System.out.println("Test Index:" + i);
-			BFSCluster.BFS(wgtz, i, 500);
+			BFSCluster.BFS(g, i, 500);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package javaML;
+package machineLearning;
 
 import java.util.Random;
 

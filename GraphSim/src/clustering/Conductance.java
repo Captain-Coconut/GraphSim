@@ -16,7 +16,7 @@ import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import graph.UnweightedGraph;
 import graph.UnweightedGraphTrove;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 public class Conductance {
 	
@@ -145,7 +145,7 @@ public class Conductance {
 	 * @param cluster: id/weight sets of a cluster
 	 * @return
 	 */
-	public static double getConductanceWeightedTrove(WeightedGraphTroveZorder ug, TIntList cluster){
+	public static double getConductanceWeightedTrove(WeightedUndirectedGraph ug, TIntList cluster){
 		
 		int amplifier = ug.amplifier;
 		
@@ -222,7 +222,7 @@ public class Conductance {
 	 * @return min conductance
 	 */
 	
-	public static double getMinConductanceWeightedTrove(WeightedGraphTroveZorder ug, List <TIntList> clusters, double sampleRate){
+	public static double getMinConductanceWeightedTrove(WeightedUndirectedGraph ug, List <TIntList> clusters, double sampleRate){
 		TDoubleList tdlist = Conductance.getSampleConductanceListWeightedTrove(ug, clusters, sampleRate);
 		TDoubleIterator ti = tdlist.iterator();
 		double minConductance = Double.MAX_VALUE;
@@ -239,7 +239,7 @@ public class Conductance {
 	 * change2: iterate through id-weight compound list only once now
 	 * change3(thinking...): change clusters to TIntHashset, however this shouldn't change time complexity a lot because the clusters themselves are actually not big (<1000). 
 	 */
-	public static double getConductanceWeightedTroveNEW(WeightedGraphTroveZorder ug, TIntList cluster, double totalWeight){
+	public static double getConductanceWeightedTroveNEW(WeightedUndirectedGraph ug, TIntList cluster, double totalWeight){
 		
 		int amplifier = ug.amplifier;
 		// total weights is already given
@@ -287,7 +287,7 @@ public class Conductance {
 		return 1.0*weightCuts/ Math.min(aSweight, aNotSweight);
 
 	}
-	public static double getTotalWeightedTrove(WeightedGraphTroveZorder ug){
+	public static double getTotalWeightedTrove(WeightedUndirectedGraph ug){
 		
 		int amplifier = ug.amplifier;
 		// begin calculating total weights
@@ -317,7 +317,7 @@ public class Conductance {
 	 * @param clusters
 	 * @return a list of conductances;
 	 */
-	public static TDoubleList getConductanceListWeightedTrove(WeightedGraphTroveZorder ug, List <TIntList> clusters){
+	public static TDoubleList getConductanceListWeightedTrove(WeightedUndirectedGraph ug, List <TIntList> clusters){
 		TDoubleList tdl = new TDoubleArrayList();
 		double totalWeight = Conductance.getTotalWeightedTrove(ug);
 		for(TIntList til: clusters){
@@ -333,7 +333,7 @@ public class Conductance {
 	 * @param sample rate, between 0 - 1.
 	 * @return a list of conductances, the size is smaller than clusters.size();
 	 */
-	public static TDoubleList getSampleConductanceListWeightedTrove(WeightedGraphTroveZorder ug, List <TIntList> clusters, double sampleRate){
+	public static TDoubleList getSampleConductanceListWeightedTrove(WeightedUndirectedGraph ug, List <TIntList> clusters, double sampleRate){
 		TDoubleList tdl = new TDoubleArrayList();
 		Random r = new Random();
 		double totalWeight = Conductance.getTotalWeightedTrove(ug);
@@ -350,7 +350,7 @@ public class Conductance {
 	 * @param cluster
 	 * @return average conductance
 	 */
-	public static double getAVGConductanceWeightedTrove(WeightedGraphTroveZorder ug, List <TIntList> clusters, double SampleRate){
+	public static double getAVGConductanceWeightedTrove(WeightedUndirectedGraph ug, List <TIntList> clusters, double SampleRate){
 		TDoubleList tdlist = Conductance.getSampleConductanceListWeightedTrove(ug, clusters, SampleRate);
 		double ConductanceSum = 0;
 		TDoubleIterator ti = tdlist.iterator();
@@ -363,7 +363,7 @@ public class Conductance {
 	public static void main(String [] args) throws IOException{
 		//System.out.println("Begin conductance testing...");
 		//UnweightedGraphTrove uwgt = new UnweightedGraphTrove("src/data/ConductanceSample","src/data/ConductanceSample_Progress");
-		WeightedGraphTroveZorder wgtz = new WeightedGraphTroveZorder("largestComponent_ConsecutiveID","largestComponent_ConsecutiveID_Read",1000);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
 		//TIntList til = new TIntArrayList();
 		//til.add(1); til.add(2);
 		//System.out.println(Conductance.getConductanceUnweightedTrove(uwgt, til));
@@ -379,7 +379,7 @@ public class Conductance {
 		}
 		List <TIntList> clusters = new ArrayList <>();
 		clusters.add(tl); clusters.add(tl2);
-		System.out.println(Conductance.getSampleConductanceListWeightedTrove(wgtz, clusters, 1));
+		System.out.println(Conductance.getSampleConductanceListWeightedTrove(g, clusters, 1));
 	}
 
 }

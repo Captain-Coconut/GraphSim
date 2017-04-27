@@ -1,4 +1,4 @@
-package javaML;
+package machineLearning;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.NormDistance;
 

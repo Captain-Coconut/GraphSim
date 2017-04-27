@@ -3,29 +3,31 @@ package publisher;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import file.GetFileOperator;
+import graph.WeightedUndirectedGraph;
 
 public class WeightFilterHashMap {
-	
 	List <Set <Integer>> componentsList = new ArrayList<>();
 	//int sizeLimit = -1;
-	int recursionLimit = 4;
+	int recursionLimit = 10;
 	double stepAmplifier = 1.2; // Needs to be larger than 1
 	
 	// See recursiveUnionfind for explanation
 	double filterDropPercentageThreshold = 0.03;
 	double filterDropSizeThreshold = 10;
 	
+	//TODO beforenodeset and afternodeset will always be the same according to how filter() was written
+	//TODO filter() needs to be changed in a way such that if the neighboring list is empty, we remove it.
 	// Size limit is NOT a hard limit.
-	public void recursiveUnionfind(Graph g, int depth, int sizeLimit, double weightThreshold) throws IOException{
+	public void recursiveUnionfind(WeightedUndirectedGraph g, int depth, int sizeLimit, double weightThreshold) throws IOException{
 		
-		Set <Integer> beforeNodeSet = g.getNodesSet();
-
+		Set <Integer> beforeNodeSet = g.getNodesSetHashSet();
+		
+		System.out.println("depth" + depth);
+		
 		if(depth >= recursionLimit)  
 		{ // If we have reached the limit for recursion, we report the cluster without partitioning
 			componentsList.add(beforeNodeSet);
@@ -34,7 +36,10 @@ public class WeightFilterHashMap {
 		
 		// filter the graph with the new weight threshold to make it sparser
 		g.filterGraph(weightThreshold);
-		Set <Integer> AfterNodeSet = g.getNodesSet();
+		Set <Integer> AfterNodeSet = g.getNodesSetHashSet();
+		System.out.println("before node set size" + beforeNodeSet.size());
+		System.out.println("after node set size" + AfterNodeSet.size());
+		System.out.println("Drop Ratio" + 1.0*AfterNodeSet.size() / beforeNodeSet.size());
 		if (1.0*AfterNodeSet.size() / beforeNodeSet.size() < filterDropPercentageThreshold || AfterNodeSet.size() < filterDropSizeThreshold) { 
 			// It means the weightThreshold is too high and we have eliminated most of the edges
 			// essentially it means most of the nodes have similar relationship with each other
@@ -45,9 +50,10 @@ public class WeightFilterHashMap {
 			return;
 		}
 
-		Map <Integer, Integer> old2new = g.remap();
+		// Now the map of the graph actually didn't change.
+		// Map <Integer, Integer> old2new = g.remap();
+		// getComponents is written in a way such that the results are the original old IDs
 		Map <Integer, Set <Integer>> components = g.getComponents();
-		components.remove(0);
 		
 		List <Set <Integer>> nextStep = new ArrayList <> ();
 		
@@ -55,45 +61,21 @@ public class WeightFilterHashMap {
 		for(Map.Entry<Integer, Set <Integer>> entry : components.entrySet()){
 			Set <Integer> cur = entry.getValue();
 			if(cur.size() < sizeLimit) { // If the component size is small enough
-				componentsList.add(mapBack(old2new, cur)); 
-				// Map the IDs back first
+				componentsList.add(cur); 
 				// Add the component to the result
 			} else{ 
-				// Map  the IDs back first
-				// And then add the component for the processing queue
-				nextStep.add(mapBack(old2new, cur));
+				// add the component for the processing queue
+				nextStep.add(cur);
 			}
 		}
-		
-		//g also needs to be mapped back
-		g.mapBack(old2new);
-		
+				
 		for(Set <Integer> cur : nextStep){
-			Graph subG = g.getSubGraph(g, cur);
+			WeightedUndirectedGraph subG = g.getSubGraph(cur);
 			recursiveUnionfind(subG, ++depth, sizeLimit, weightThreshold*stepAmplifier);
 		}
 		
 	}
-	
-	public Map <Integer, Integer> reversePair(Map <Integer, Integer> old2new){
-		// Reverse the relationship
-		Map <Integer, Integer> new2old = new HashMap <Integer, Integer> ();
-		for(Map.Entry<Integer, Integer> entry : old2new.entrySet()){
-			new2old.put(entry.getValue(), entry.getKey());
-		}
-		return new2old;
-	}
-	
-	public Set <Integer> mapBack (Map<Integer, Integer> old2new, Set <Integer> newSet){
-		Map <Integer, Integer> new2old = reversePair(old2new);
-		Set <Integer> oldSet = new HashSet <>();
-		for(int newEntry: newSet){
-			oldSet.add(new2old.get(newEntry));
-		}
-		return oldSet;
-	}
-	
-	//	List <Set <Integer>> componentsList = new ArrayList<>();
+		
 	public void writeComponents(String filepath) throws IOException{
 		GetFileOperator gfo = new GetFileOperator();
 		Writer w = gfo.getWriter(filepath);
@@ -114,24 +96,29 @@ public class WeightFilterHashMap {
 		// ... To save memory
 		// The major difference is that in the first recursion, there is NO remapping any more
 		WeightFilterHashMap wfhm = new WeightFilterHashMap();
-		Graph g = new Graph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
 		Map <Integer, Set <Integer>> components = g.getComponents();
 		List <Set <Integer>> bigComponents = new ArrayList <> ();
 		for(Map.Entry<Integer, Set <Integer>> entry: components.entrySet()){
 			if(entry.getValue().size() > 1000) { 
 				//if we find big components, save them for future use
-				System.out.println("Find big component of size " + entry.getValue().size());
+				System.out.println("Find big component of size : " + entry.getValue().size());
+				// System.out.println("Component Content:" + entry.getValue().toString());
 				bigComponents.add(entry.getValue());
 			} else{
-				// put the smaller components directly to the resuls.
+				// put the smaller components directly to the results.
 				wfhm.componentsList.add(entry.getValue());
 			}
 		}
 		
-		List <Graph> listGraphs = g.getSubGraphs(g, bigComponents);
-		for(Graph subG : listGraphs){
-			wfhm.recursiveUnionfind(subG, 0, 500, 4.58 * wfhm.stepAmplifier);
+		System.out.println("big components size" + bigComponents.size());
+		
+		for(Set <Integer> component: bigComponents){
+			WeightedUndirectedGraph subG = g.getSubGraph(component);
+			System.out.println("subG size:" + subG.getNumOfNodes());
+			wfhm.recursiveUnionfind(subG, 0, 200, 4.58 * wfhm.stepAmplifier);
 		}
+		
 		
 		wfhm.writeComponents(args[1]);
 

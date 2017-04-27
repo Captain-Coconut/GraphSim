@@ -3,10 +3,7 @@ package test;
 import java.io.IOException;
 
 import clustering.KwikClusterOutDated;
-import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.TIntObjectMap;
 import graph.CorrelationGraph;
 
 public class testKwik {

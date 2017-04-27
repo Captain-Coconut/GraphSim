@@ -18,7 +18,6 @@ public class WeightedGraph {
 	public int numsofnodes=0;
 	public int numsofedges=0;
 
-
 	/**
 	 * Construct a weighted graph from a local file
 	 * file format: id1,id2,weight 

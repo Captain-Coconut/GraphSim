@@ -15,7 +15,7 @@ import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import graph.UnweightedGraph;
 import graph.UnweightedGraphTrove;
-import graph.WeightedGraphTroveZorder;
+import graph.WeightedUndirectedGraph;
 
 public class RandomWalk {
 	List<Integer> walk = new ArrayList<>();
@@ -173,7 +173,7 @@ public class RandomWalk {
 	 *            the maximum size of the cluster
 	 * @return List of the walk trajectory
 	 */
-	public static TIntList RandomWalkCluster(WeightedGraphTroveZorder g, int start, int MAX) {
+	public static TIntList RandomWalkCluster(WeightedUndirectedGraph g, int start, int MAX) {
 		// Map<Integer, Set<Integer>> map = g.map;
 		TIntObjectMap<TIntList> map = g.map;
 		// int amplifier = g.amplifier;
@@ -246,11 +246,11 @@ public class RandomWalk {
 	
 	public static void main (String [] args) throws IOException {
 		System.out.println("Begin testing Random Walk");
-		WeightedGraphTroveZorder wgtz = new WeightedGraphTroveZorder("largestComponent_ConsecutiveID", "TestRW_Track", 1000);
+		WeightedUndirectedGraph g = new WeightedUndirectedGraph(args[0], 1,  ",",  4.58, 1000, 1, 2, 6);
 		int i = 0;
 		while(i++ < 10){
 			System.out.println("Test Index:" + i);
-			RandomWalk.RandomWalkCluster(wgtz, i, 500);
+			RandomWalk.RandomWalkCluster(g, i, 500);
 		}
 	}
 

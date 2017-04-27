@@ -1,4 +1,4 @@
-package publisher;
+package graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +19,7 @@ import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
+import publisher.UnionFind;
 
 // This is a revised version of class::GraphNoRemap.
 // The major change is right now we don't set remap/mapback as seperate functions and create new graphs
@@ -26,7 +27,7 @@ import gnu.trove.set.TIntSet;
 // getNodesSet is changed.
 // Remapping is changed
 
-public class GraphNoRemap {
+public class WeightedUndirectedGraph {
 	
 	public TIntObjectMap <TIntList> map = new TIntObjectHashMap<>();
 	public int amplifier;
@@ -45,7 +46,7 @@ public class GraphNoRemap {
 	 * @param weight_index: index for weight in the edge list file
 	 * @throws IOException
 	 */ 
-	public GraphNoRemap(String input_path, int header, String delimiter, double threshold, int amplifier, int id1_index, int id2_index, int weight_index) throws IOException {
+	public WeightedUndirectedGraph(String input_path, int header, String delimiter, double threshold, int amplifier, int id1_index, int id2_index, int weight_index) throws IOException {
 		GetFileOperator gfo = new GetFileOperator();
 		BufferedReader br = gfo.getBR(input_path);
 		this.amplifier = amplifier;
@@ -94,7 +95,7 @@ public class GraphNoRemap {
 	 * construct a graph from a HashMap
 	 * @param map: a HashMap with "flattened" format 
 	 */
-	public GraphNoRemap(TIntObjectMap <TIntList> map, int amplifier){
+	public WeightedUndirectedGraph(TIntObjectMap <TIntList> map, int amplifier){
 		this.amplifier = amplifier;
 		this.map = map;
 	}
@@ -102,7 +103,7 @@ public class GraphNoRemap {
 	/**
 	 * Constructor used when we simply want to use the functions.
 	 */
-	public GraphNoRemap(){
+	public WeightedUndirectedGraph(){
 		this.amplifier = 1;
 	}
 	
@@ -118,6 +119,26 @@ public class GraphNoRemap {
 			numOfEdges += mapIterator.value().size();
 		}
 		return numOfEdges/4;  // divided by 4 because weights are also in the list
+	}
+	
+	public int getMaxID(){
+		TIntSet tis = map.keySet();
+		TIntIterator tii = tis.iterator();
+		int max = Integer.MIN_VALUE;
+		while(tii.hasNext()){
+			max = Math.max(max,tii.next());
+		}
+		return max;
+	}
+	
+	public int getMinID(){
+		TIntSet tis = map.keySet();
+		TIntIterator tii = tis.iterator();
+		int min = Integer.MAX_VALUE;
+		while(tii.hasNext()){
+			min = Math.min(min,tii.next());
+		}
+		return min;
 	}
 	
 	// Changed to a more efficient calculation
@@ -347,7 +368,7 @@ public class GraphNoRemap {
 		return null;
 	}
 	
-	public GraphNoRemap getSubGraph(Set <Integer> component) {
+	public WeightedUndirectedGraph getSubGraph(Set <Integer> component) {
 		
 		TIntObjectMap <TIntList> newMap = new TIntObjectHashMap<>();
 		
@@ -376,13 +397,13 @@ public class GraphNoRemap {
 			newMap.put(key, newNeighborsAndWeight);
 		}
 		
-		return new GraphNoRemap(newMap, amplifier);
+		return new WeightedUndirectedGraph(newMap, amplifier);
 		
 	}
 	
-	public List <GraphNoRemap> getSubGraphs(List <Set <Integer>> listOfComponents){
-		List <GraphNoRemap> res = new ArrayList <>();
-		GraphNoRemap gt = new GraphNoRemap();
+	public List <WeightedUndirectedGraph> getSubGraphs(List <Set <Integer>> listOfComponents){
+		List <WeightedUndirectedGraph> res = new ArrayList <>();
+		WeightedUndirectedGraph gt = new WeightedUndirectedGraph();
 		for(Set <Integer> component : listOfComponents){
 			res.add(gt.getSubGraph(component));
 		}

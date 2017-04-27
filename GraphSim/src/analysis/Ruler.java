@@ -1,4 +1,4 @@
-package graph;
+package analysis;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import file.GetFileOperator;
+import graph.UnweightedGraph;
 
 public class Ruler {
 	
